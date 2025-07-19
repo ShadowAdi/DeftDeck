@@ -49,4 +49,6 @@ export const TeamSchema = new Schema({
     ref: "Panel",
     default: [],
   },
+},{
+    timestamps:true
 });
