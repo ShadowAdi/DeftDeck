@@ -38,6 +38,10 @@ export const PanelSchema = new mongoose.Schema(
       ref: "PanelCard",
       default: [],
     },
+    isEditable: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
