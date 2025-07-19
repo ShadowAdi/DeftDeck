@@ -7,7 +7,7 @@ const { combine, timestamp, printf, colorize } = format;
 const __fileURLToPath = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__fileURLToPath);
 
-const logDir = path.join(__dirname, "logs");
+const logDir = path.join(__dirname, "../../logs");
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
 }
