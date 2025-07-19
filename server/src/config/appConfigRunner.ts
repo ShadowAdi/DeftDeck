@@ -14,7 +14,7 @@ export const AppConnect = (app: Express) => {
         `Server started at PORT: ${PORT} and you can see here http://localhost:${PORT}`
       );
     });
-    DBConnect(app, server);
+    DBConnect(server);
   } catch (error) {
     logger.error(`Error in Starting the server at PORT: ${PORT}`);
     console.error(`Error in Starting the server at PORT: ${PORT}`);

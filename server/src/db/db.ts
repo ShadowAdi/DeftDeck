@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 import { logger } from "../config/loggerConfig.js";
-import { Express } from "express";
 import { Server } from "http";
 import { MONGODB_URL } from "../config/DotEnvConfig.js";
 
-export const DBConnect = async (app: Express, server: Server) => {
+export const DBConnect = async (server: Server) => {
   if (!MONGODB_URL) {
     server.close(() => {
       logger.warn("🔌 Server closed because connecting string is not found");
