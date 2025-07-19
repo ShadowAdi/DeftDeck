@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 export const UserSchema = new mongoose.Schema(
   {
@@ -25,6 +25,16 @@ export const UserSchema = new mongoose.Schema(
     },
     companyLogo: {
       type: String,
+    },
+    teams: {
+      type: [Types.ObjectId],
+      ref: "Team",
+      default: [],
+    },
+    panels: {
+      type: [Types.ObjectId],
+      ref: "Panel",
+      default: [],
     },
   },
   {
