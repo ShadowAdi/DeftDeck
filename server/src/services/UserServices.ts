@@ -11,9 +11,12 @@ export const GetAllUsersService = async (
     const users = await UserModel.find(filter);
     return users;
   } catch (error) {
-    logger.error(`Failed to get all users ` + error);
-    console.error(`Failed to get all users `, error);
-    throw new AppError(`Error Fetching Users From DB`, 500);
+    logger.error(`Failed to get all users ${error}` + error);
+    console.error(`Failed to get all users ${error}`, error);
+    throw new AppError(
+      `Error Fetching Users From DB and error is: ${error}`,
+      500
+    );
   }
 };
 
@@ -24,6 +27,33 @@ export const GetUserService = async (userId: string) => {
   } catch (error) {
     logger.error(`Failed to get user with this id: ${userId} ` + error);
     console.error(`Failed to get user with this id: ${userId} `, error);
-    throw new AppError(`Failed to get user with this id: ${userId} `, 500);
+    throw new AppError(
+      `Failed to get user with this id: ${userId} and error is: ${error}`,
+      500
+    );
+  }
+};
+
+export const CreateUserService = async (userData: {
+  email: string;
+  name: string;
+  password: string;
+  profileUrl: string | null;
+  companyName: string;
+}) => {
+  try {
+    const user = new UserModel({
+      email: userData.email,
+      name: userData.name,
+      password: userData.password,
+      companyName: userData.companyName,
+      profileUrl: userData?.profileUrl,
+    });
+    await user.save();
+    return user;
+  } catch (error) {
+    logger.error(`Failed to create user: ` + error);
+    console.error(`Failed to create user: `, error);
+    throw new AppError(`Failed to create user: ${error}`, 500);
   }
 };
