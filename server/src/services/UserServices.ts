@@ -1,7 +1,7 @@
 import { logger } from "../config/loggerConfig.js";
 import { UserModel } from "../models/UserModel.js";
 import { AppError } from "../utils/AppError.js";
-
+import bcrypt from "bcrypt";
 export const GetAllUsersService = async (
   query: { key: string; value: string } | {}
 ) => {
@@ -42,10 +42,11 @@ export const CreateUserService = async (userData: {
   companyName: string;
 }) => {
   try {
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
     const user = new UserModel({
       email: userData.email,
       name: userData.name,
-      password: userData.password,
+      password: hashedPassword,
       companyName: userData.companyName,
       profileUrl: userData?.profileUrl,
     });
@@ -57,7 +58,6 @@ export const CreateUserService = async (userData: {
     throw new AppError(`Failed to create user: ${error}`, 500);
   }
 };
-
 
 export const IsEmailTaken = async (email: string) => {
   const user = await UserModel.findOne({ email });
