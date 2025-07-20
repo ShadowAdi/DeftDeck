@@ -4,7 +4,8 @@ import { GetAllUsersService } from "../services/UserServices.js";
 
 export const GetAllUsers = CustomTryCatch(
   async (request: Request, response: Response, next: NextFunction) => {
-    const users = await GetAllUsersService({});
+    const { key, value } = request.query;
+    const users = await GetAllUsersService(key && value ? { key, value } : {});
     return response.status(200).json({
       success: true,
       message: "Users retrieved successfully.",

@@ -13,6 +13,11 @@ export const CustomErrorHandler = (
   logger.error(
     `Failed to get the error the status code is ${err.status} and the message is ${err.message}`
   );
+  if (!err.isOperational) {
+    logger.error("UNHANDLED ERROR 💥", err);
+    console.error("UNHANDLED ERROR 💥", err);
+  }
+
   response.status(err.statusCode).json({
     success: false,
     status: err.statusCode,
