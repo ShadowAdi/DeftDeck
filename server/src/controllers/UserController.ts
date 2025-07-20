@@ -3,6 +3,7 @@ import { CustomTryCatch } from "../utils/CustomTryCatch.js";
 import {
   CreateUserService,
   GetAllUsersService,
+  LoginUserService,
 } from "../services/UserServices.js";
 
 export const GetAllUsers = CustomTryCatch(
@@ -21,7 +22,7 @@ export const CreateUser = CustomTryCatch(
   async (request: Request, response: Response, next: NextFunction) => {
     const userData = request.body;
     const userCreated = await CreateUserService(userData);
-    return response.status(200).json({
+    return response.status(201).json({
       success: true,
       message: "User Created successfully.",
       data: userCreated,
@@ -32,11 +33,12 @@ export const CreateUser = CustomTryCatch(
 export const LoginUser = CustomTryCatch(
   async (request: Request, response: Response, next: NextFunction) => {
     const userData = request.body;
-    const userCreated = await CreateUserService(userData);
+    const { token, isUser } = await LoginUserService(userData);
     return response.status(200).json({
       success: true,
-      message: "User Created successfully.",
-      data: userCreated,
+      message: "User Login successfully.",
+      data: isUser,
+      token,
     });
   }
 );

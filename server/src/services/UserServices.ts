@@ -2,6 +2,7 @@ import { logger } from "../config/loggerConfig.js";
 import { UserModel } from "../models/UserModel.js";
 import { AppError } from "../utils/AppError.js";
 import bcrypt from "bcrypt";
+import { TokenGenerator } from "../utils/TokenGenerator.js";
 
 export const GetAllUsersService = async (
   query: { key: string; value: string } | {}
@@ -60,6 +61,35 @@ export const CreateUserService = async (userData: {
   }
 };
 
+export const LoginUserService = async (userData: {
+  email: string;
+  password: string;
+}) => {
+  try {
+    const isUser = await IsUserExists(userData.email);
+    if (!isUser) {
+      throw new AppError(
+        `Account With This Email ${userData.email} Not Exists. You Should Try To Login First`,
+        404
+      );
+    }
+    const isPasswordExists = await bcrypt.compare(
+      userData.password,
+      isUser?.password
+    );
+    if (!isPasswordExists) {
+      throw new AppError(`Invalid Credentials`, 401);
+    }
+    const payload = { email: isUser.email, sub: String(isUser._id) };
+    const token = await TokenGenerator(payload);
+    return {token,isUser}
+  } catch (error) {
+    logger.error(`Failed to create user: ` + error);
+    console.error(`Failed to create user: `, error);
+    throw new AppError(`Failed to create user: ${error}`, 500);
+  }
+};
+
 export const IsEmailTaken = async (email: string) => {
   const user = await UserModel.findOne({ email });
   return !!user;
@@ -67,9 +97,5 @@ export const IsEmailTaken = async (email: string) => {
 
 export const IsUserExists = async (email: string) => {
   const user = await UserModel.findOne({ email });
-  if (user) {
-    return true;
-  }
-  return false;
+  return user;
 };
-
