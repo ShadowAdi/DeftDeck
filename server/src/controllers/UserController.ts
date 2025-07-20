@@ -3,8 +3,11 @@ import { CustomTryCatch } from "../utils/CustomTryCatch.js";
 import {
   CreateUserService,
   GetAllUsersService,
+  IsUserExists,
   LoginUserService,
 } from "../services/UserServices.js";
+import { logger } from "../config/loggerConfig.js";
+import { AppError } from "../utils/AppError.js";
 
 export const GetAllUsers = CustomTryCatch(
   async (request: Request, response: Response, next: NextFunction) => {
@@ -39,6 +42,23 @@ export const LoginUser = CustomTryCatch(
       message: "User Login successfully.",
       data: isUser,
       token,
+    });
+  }
+);
+
+export const authenticatedUser = CustomTryCatch(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const { user } = request;
+    if (!user) {
+      logger.error(`User Not Found in the request `, request?.user);
+      throw new AppError(`You Are Not Authenticated`, 401);
+    }
+    const { email } = user;
+    const userDetail = await IsUserExists(email);
+    return response.status(200).json({
+      success: true,
+      message: "Authenticated User Found Successfully",
+      userDetail,
     });
   }
 );
