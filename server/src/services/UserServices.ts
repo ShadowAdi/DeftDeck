@@ -82,20 +82,46 @@ export const LoginUserService = async (userData: {
     }
     const payload = { email: isUser.email, sub: String(isUser._id) };
     const token = await TokenGenerator(payload);
-    return {token,isUser}
+    return { token, isUser };
   } catch (error) {
-    logger.error(`Failed to create user: ` + error);
-    console.error(`Failed to create user: `, error);
-    throw new AppError(`Failed to create user: ${error}`, 500);
+    logger.error(`Failed to login user: ` + error);
+    console.error(`Failed to login user: `, error);
+    throw new AppError(`Failed to login user: ${error}`, 500);
   }
 };
 
 export const IsEmailTaken = async (email: string) => {
-  const user = await UserModel.findOne({ email });
-  return !!user;
+  try {
+    const user = await UserModel.findOne({ email });
+    return !!user;
+  } catch (error) {
+    logger.error(`Failed to find user with email:${email} ` + error);
+    console.error(`Failed to find user with email:${email} `, error);
+    throw new AppError(
+      `Failed to find user with email:${email} and error is ${error}`,
+      500
+    );
+  }
 };
 
 export const IsUserExists = async (email: string) => {
-  const user = await UserModel.findOne({ email });
-  return user;
+  try {
+    const user = await UserModel.findOne({ email });
+    return user;
+  } catch (error) {
+    logger.error(`Failed to find user: ` + error);
+    console.error(`Failed to find user: `, error);
+    throw new AppError(`Failed to find user: ${error}`, 500);
+  }
+};
+
+export const DeleteUserService = async (id: string) => {
+  try {
+    await UserModel.findByIdAndDelete(id);
+    return true;
+  } catch (error) {
+    logger.error(`Failed to delete user: ` + error);
+    console.error(`Failed to delete user: `, error);
+    throw new AppError(`Failed to delete user: ${error}`, 500);
+  }
 };

@@ -2,6 +2,7 @@ import express from "express";
 import {
   authenticatedUser,
   CreateUser,
+  DeleteUser,
   GetAllUsers,
   LoginUser,
 } from "../controllers/UserController.js";
@@ -16,5 +17,7 @@ UserRouter.get("/", GetAllUsers);
 UserRouter.post("/", CreateValidateUser(), ValidateRequest, CreateUser);
 UserRouter.post("/login", userLoginValidator(), ValidateRequest, LoginUser);
 UserRouter.get("/me", CheckAuth, authenticatedUser);
+UserRouter.delete("/me", CheckAuth, DeleteUser);
+
 
 export default UserRouter;

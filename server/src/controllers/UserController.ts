@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { CustomTryCatch } from "../utils/CustomTryCatch.js";
 import {
   CreateUserService,
+  DeleteUserService,
   GetAllUsersService,
   IsUserExists,
   LoginUserService,
@@ -60,5 +61,24 @@ export const authenticatedUser = CustomTryCatch(
       message: "Authenticated User Found Successfully",
       userDetail,
     });
+  }
+);
+
+export const DeleteUser = CustomTryCatch(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const { user } = request;
+    if (!user) {
+      logger.error(`User Not Found in the request `, request?.user);
+      throw new AppError(`You Are Not Authenticated`, 401);
+    }
+    const { email } = user;
+    const userDetail = await IsUserExists(email);
+    if (userDetail) {
+      const isDeleted = await DeleteUserService(userDetail.email);
+      return response.status(200).json({
+        success: isDeleted,
+        message: "Account Deleted",
+      });
+    }
   }
 );
