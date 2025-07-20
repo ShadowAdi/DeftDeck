@@ -5,12 +5,10 @@ import { GetAllUsersService } from "../services/UserServices.js";
 export const GetAllUsers = CustomTryCatch(
   async (request: Request, response: Response, next: NextFunction) => {
     const users = await GetAllUsersService({});
-    if (users instanceof Error) {
-      return response.status(500).json({
-        success: false,
-        message: "Failed to retrieve users.",
-        error: users.message,
-      });
-    }
+    return response.status(200).json({
+      success: true,
+      message: "Users retrieved successfully.",
+      data: users,
+    });
   }
 );
