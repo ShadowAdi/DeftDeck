@@ -4,6 +4,7 @@ import { CorsConfig } from "./config/corsConfig.js";
 import { AppConnect } from "./config/appConfigRunner.js";
 import { healthRouter } from "./routes/healthRouter.js";
 import UserRouter from "./routes/userRouter.js";
+import { CustomErrorHandler } from "./middlewares/ErrorHandler.js";
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use(express.json());
 
 app.use("/api/health", healthRouter);
 app.use("/api/user", UserRouter);
+
+app.use(CustomErrorHandler)
 
 
 AppConnect(app);
