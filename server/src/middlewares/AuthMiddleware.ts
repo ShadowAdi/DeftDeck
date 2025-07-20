@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { JSON_SECRET } from "../config/DotEnvConfig.js";
 import { logger } from "../config/loggerConfig.js";
 import { AppError } from "../utils/AppError.js";
-import { JwtPayload, verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { DecodedUser } from "../types/user/userType.js";
 
 export const CheckAuth = async (
@@ -23,7 +23,7 @@ export const CheckAuth = async (
       return next(new AppError(message, 401));
     }
     const token = authHeader.split(" ")[1];
-    const decoded = verify(token, JSON_SECRET) as JwtPayload;
+    const decoded = jwt.verify(token, JSON_SECRET) as jwt.JwtPayload;
 
     if (typeof decoded !== "string" && decoded.sub && decoded.email) {
       req.user = {
