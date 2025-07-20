@@ -2,6 +2,7 @@ import { logger } from "../config/loggerConfig.js";
 import { UserModel } from "../models/UserModel.js";
 import { AppError } from "../utils/AppError.js";
 import bcrypt from "bcrypt";
+
 export const GetAllUsersService = async (
   query: { key: string; value: string } | {}
 ) => {
