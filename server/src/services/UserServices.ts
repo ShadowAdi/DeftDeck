@@ -64,3 +64,12 @@ export const IsEmailTaken = async (email: string) => {
   const user = await UserModel.findOne({ email });
   return !!user;
 };
+
+export const IsUserExists = async (email: string) => {
+  const user = await UserModel.findOne({ email });
+  if (user) {
+    return true;
+  }
+  return false;
+};
+

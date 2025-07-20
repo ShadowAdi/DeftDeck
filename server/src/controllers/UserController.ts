@@ -28,3 +28,15 @@ export const CreateUser = CustomTryCatch(
     });
   }
 );
+
+export const LoginUser = CustomTryCatch(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const userData = request.body;
+    const userCreated = await CreateUserService(userData);
+    return response.status(200).json({
+      success: true,
+      message: "User Created successfully.",
+      data: userCreated,
+    });
+  }
+);
