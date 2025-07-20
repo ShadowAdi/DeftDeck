@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
+import { AppError } from "../utils/AppError.js";
 
 export const ValidateRequest = (
   request: Request,
@@ -8,13 +9,10 @@ export const ValidateRequest = (
 ) => {
   const errors = validationResult(request);
   if (!errors.isEmpty()) {
-    const extractedErrors = errors.array().map((err) => ({
-      field: err.type,
-      message: err.msg,
-    }));
-    return response.status(400).json({
-      success: false,
-      errors: extractedErrors,
-    });
+    if (!errors.isEmpty()) {
+      const [firstError] = errors.array();
+      return next(new AppError(firstError.msg, 400));
+    }
   }
+  next();
 };

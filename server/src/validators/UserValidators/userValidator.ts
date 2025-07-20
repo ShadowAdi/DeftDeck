@@ -24,7 +24,7 @@ export function CreateValidateUser() {
         }
         return true;
       }),
-    body("companyName").trim().optional(),
+    body("companyName").trim(),
     body("password")
       .trim()
       .notEmpty()
