@@ -57,3 +57,9 @@ export const CreateUserService = async (userData: {
     throw new AppError(`Failed to create user: ${error}`, 500);
   }
 };
+
+
+export const IsEmailTaken = async (email: string) => {
+  const user = await UserModel.findOne({ email });
+  return !!user;
+};

@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import { IsEmailTaken } from "../../services/UserServices.js";
 
 export function CreateValidateUser() {
   return [
@@ -15,7 +16,14 @@ export function CreateValidateUser() {
       .trim()
       .toLowerCase()
       .notEmpty()
-      .withMessage("Email Should Not Be Empty"),
+      .withMessage("Email Should Not Be Empty")
+      .custom(async (email) => {
+        const exists = await IsEmailTaken(email);
+        if (exists) {
+          throw new Error("Email already in use");
+        }
+        return true;
+      }),
     body("companyName").trim().optional(),
     body("password")
       .trim()
