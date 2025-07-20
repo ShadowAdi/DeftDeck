@@ -13,3 +13,7 @@ export const GetAllUsers = CustomTryCatch(
     });
   }
 );
+
+export const CreateUser = CustomTryCatch(
+  async (request: Request, response: Response, next: NextFunction) => {}
+);

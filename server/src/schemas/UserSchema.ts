@@ -23,9 +23,6 @@ export const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    companyLogo: {
-      type: String,
-    },
     teams: {
       type: [Types.ObjectId],
       ref: "Team",

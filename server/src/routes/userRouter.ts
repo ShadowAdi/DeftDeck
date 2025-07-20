@@ -1,9 +1,11 @@
 import express from "express";
-import { GetAllUsers } from "../controllers/UserController.js";
+import { CreateUser, GetAllUsers } from "../controllers/UserController.js";
+import { CreateValidateUser } from "../validators/UserValidators/userValidator.js";
+import { ValidateRequest } from "../middlewares/ValidateRequest.js";
 
-const UserRouter=express.Router()
+const UserRouter = express.Router();
 
+UserRouter.get("/", GetAllUsers);
+UserRouter.post("/", CreateValidateUser(), ValidateRequest, CreateUser);
 
-UserRouter.get("/",GetAllUsers)
-
-export default UserRouter
+export default UserRouter;
