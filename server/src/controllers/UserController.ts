@@ -6,6 +6,7 @@ import {
   GetAllUsersService,
   IsUserExists,
   LoginUserService,
+  UpdateUserService,
 } from "../services/UserServices.js";
 import { logger } from "../config/loggerConfig.js";
 import { AppError } from "../utils/AppError.js";
@@ -78,6 +79,29 @@ export const DeleteUser = CustomTryCatch(
       return response.status(200).json({
         success: isDeleted,
         message: "Account Deleted",
+      });
+    }
+  }
+);
+
+export const UpdatedUser = CustomTryCatch(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const userData = request.body;
+    const { user } = request;
+    if (!user) {
+      logger.error(`User Not Found in the request `, request?.user);
+      throw new AppError(`You Are Not Authenticated`, 401);
+    }
+    const { email } = user;
+    const userDetail = await IsUserExists(email);
+    if (userDetail) {
+      const updatedUser = await UpdateUserService(
+        String(userDetail._id),
+        userData
+      );
+      return response.status(200).json({
+        success: updatedUser,
+        message: "Account Updated",
       });
     }
   }

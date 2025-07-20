@@ -125,3 +125,19 @@ export const DeleteUserService = async (id: string) => {
     throw new AppError(`Failed to delete user: ${error}`, 500);
   }
 };
+
+export const UpdateUserService = async (
+  id: string,
+  updatedUserData: { name: string; profileUrl: string; companyName: string }
+) => {
+  try {
+    const updateUser = await UserModel.findByIdAndUpdate(id, updatedUserData, {
+      new: true,
+    });
+    return updateUser;
+  } catch (error) {
+    logger.error(`Failed to update user: ` + error);
+    console.error(`Failed to update user: `, error);
+    throw new AppError(`Failed to update user: ${error}`, 500);
+  }
+};

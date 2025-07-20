@@ -5,6 +5,7 @@ import {
   DeleteUser,
   GetAllUsers,
   LoginUser,
+  UpdatedUser,
 } from "../controllers/UserController.js";
 import { CreateValidateUser } from "../validators/UserValidators/userValidator.js";
 import { ValidateRequest } from "../middlewares/ValidateRequest.js";
@@ -18,6 +19,7 @@ UserRouter.post("/", CreateValidateUser(), ValidateRequest, CreateUser);
 UserRouter.post("/login", userLoginValidator(), ValidateRequest, LoginUser);
 UserRouter.get("/me", CheckAuth, authenticatedUser);
 UserRouter.delete("/me", CheckAuth, DeleteUser);
+UserRouter.patch("/me", CheckAuth, UpdatedUser);
 
 
 export default UserRouter;
