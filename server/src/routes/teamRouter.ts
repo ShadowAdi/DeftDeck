@@ -7,13 +7,28 @@ import {
   GetTeam,
   UpdateTeam,
 } from "../controllers/TeamsController.js";
+import { CreateValidateTeam } from "../validators/TeamValidators/teamValidator.js";
+import { ValidateRequest } from "../middlewares/ValidateRequest.js";
+import { UpdateUserValidator } from "../validators/UserValidators/updateUserValidator.js";
 
 const TeamRouter = express.Router();
 
 TeamRouter.get("/", CheckAuth, GetAllTeams);
-TeamRouter.post("/", CheckAuth, CreateTeam);
+TeamRouter.post(
+  "/",
+  CreateValidateTeam(),
+  ValidateRequest,
+  CheckAuth,
+  CreateTeam
+);
 TeamRouter.get("/team/:teamId", GetTeam);
-TeamRouter.patch("/team/:teamId", CheckAuth, UpdateTeam);
+TeamRouter.patch(
+  "/team/:teamId",
+  UpdateUserValidator(),
+  ValidateRequest,
+  CheckAuth,
+  UpdateTeam
+);
 TeamRouter.get("/team/:teamId", CheckAuth, DeleteTeam);
 
 export default TeamRouter;

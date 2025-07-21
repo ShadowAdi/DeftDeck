@@ -71,15 +71,6 @@ export const CreateTeam = CustomTryCatch(
       throw new AppError(`User with the email:${email} don't exists`, 401);
     }
     const teamData = request.body;
-    const isTeamExist = await isTeamWithSameName(teamData.name);
-    if (!isTeamExist) {
-      console.error(`User with the name:${teamData.name} already exists`);
-      logger.error(`User with the name:${teamData.name} already exists`);
-      throw new AppError(
-        `User with the name:${teamData.name} already exists`,
-        401
-      );
-    }
     const createTeamData = await CreateTeamService(teamData, sub);
     return response.status(201).json({
       success: true,
