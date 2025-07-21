@@ -29,6 +29,6 @@ TeamRouter.patch(
   CheckAuth,
   UpdateTeam
 );
-TeamRouter.get("/team/:teamId", CheckAuth, DeleteTeam);
+TeamRouter.delete("/team/:teamId", CheckAuth, DeleteTeam);
 
 export default TeamRouter;

@@ -111,7 +111,7 @@ export const isTeamExist = async (teamId: string) => {
 
 export const isTeamWithSameName = async (teamName: string) => {
   try {
-    const teamFound = await TeamModel.find({ teamName });
+    const teamFound = await TeamModel.findOne({ teamName });
     if (teamFound) {
       return true;
     }

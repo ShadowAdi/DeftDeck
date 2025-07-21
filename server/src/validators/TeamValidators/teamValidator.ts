@@ -11,7 +11,7 @@ export function CreateValidateTeam() {
       .custom(async (teamName) => {
         const exists = await isTeamWithSameName(teamName);
         if (exists) {
-          throw new Error("Team Name alreafy in use");
+          throw new Error("Team Name already in use");
         }
         return true;
       }),
