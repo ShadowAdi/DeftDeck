@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use("/api/health", healthRouter);
 app.use("/api/user", UserRouter);
-app.use("/api/team", TeamRouter);
+app.use("/api/teams", TeamRouter);
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
