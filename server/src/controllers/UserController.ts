@@ -75,7 +75,7 @@ export const DeleteUser = CustomTryCatch(
     const { email } = user;
     const userDetail = await IsUserExists(email);
     if (userDetail) {
-      const isDeleted = await DeleteUserService(userDetail.email);
+      const isDeleted = await DeleteUserService(String(userDetail._id));
       return response.status(200).json({
         success: isDeleted,
         message: "Account Deleted",

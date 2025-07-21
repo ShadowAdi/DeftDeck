@@ -11,6 +11,7 @@ import { CreateValidateUser } from "../validators/UserValidators/userValidator.j
 import { ValidateRequest } from "../middlewares/ValidateRequest.js";
 import { userLoginValidator } from "../validators/UserValidators/userLoginValidator.js";
 import { CheckAuth } from "../middlewares/AuthMiddleware.js";
+import { UpdateUserValidator } from "../validators/UserValidators/updateUserValidator.js";
 
 const UserRouter = express.Router();
 
@@ -19,7 +20,12 @@ UserRouter.post("/", CreateValidateUser(), ValidateRequest, CreateUser);
 UserRouter.post("/login", userLoginValidator(), ValidateRequest, LoginUser);
 UserRouter.get("/me", CheckAuth, authenticatedUser);
 UserRouter.delete("/me", CheckAuth, DeleteUser);
-UserRouter.patch("/me", CheckAuth, UpdatedUser);
-
+UserRouter.patch(
+  "/me",
+  UpdateUserValidator(),
+  ValidateRequest,
+  CheckAuth,
+  UpdatedUser
+);
 
 export default UserRouter;
