@@ -46,6 +46,27 @@ export const GetPanelService = async (userId: String, panelId: string) => {
   }
 };
 
+export const IsPanelExist = async (userId: String, panelId: string) => {
+  try {
+    const panelFound = await PanelModel.find({
+      createdBy: userId,
+      _id: panelId,
+    });
+    if (panelFound) {
+        return true
+    }
+    return false;
+  } catch (error) {
+    logger.error(`Failed to find panel with id: ${panelId} ` + error);
+    console.error(`Failed to find panel with id: ${panelId} `, error);
+    throw new AppError(
+      `Failed to find panel with id: ${panelId} and error is: ${error}`,
+      500
+    );
+  }
+};
+
+
 export const CreatePanelService = async (
   teamId: string,
   userId: string,
@@ -60,5 +81,16 @@ export const CreatePanelService = async (
     logger.error(`Failed to create panel` + error);
     console.error(`Failed to create panel`, error);
     throw new AppError(`Failed to create panel and error is: ${error}`, 500);
+  }
+};
+
+export const DeletePanelService = async (panelId: string) => {
+  try {
+    await PanelModel.findByIdAndDelete(panelId);
+    return "Pannel is deleted successfully";
+  } catch (error) {
+    logger.error(`Failed to delete panel` + error);
+    console.error(`Failed to delete panel`, error);
+    throw new AppError(`Failed to delete panel and error is: ${error}`, 500);
   }
 };
