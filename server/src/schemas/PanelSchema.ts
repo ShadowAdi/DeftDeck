@@ -33,9 +33,9 @@ export const PanelSchema = new mongoose.Schema(
     panelColor: {
       type: String,
     },
-    panelCards: {
+    cards: {
       type: [Types.ObjectId],
-      ref: "PanelCard",
+      ref: "Card",
       default: [],
     },
     isEditable: {
