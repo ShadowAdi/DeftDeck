@@ -27,3 +27,20 @@ export const GetAllPanelsService = async (
     throw new AppError(`Failed to find panels: ${error}`, 500);
   }
 };
+
+export const GetPanelService = async (userId: String, panelId: string) => {
+  try {
+    const panelFound = await PanelModel.find({
+      createdBy: userId,
+      _id: panelId,
+    });
+    return panelFound;
+  } catch (error) {
+    logger.error(`Failed to find panel with id: ${panelId} ` + error);
+    console.error(`Failed to find panel with id: ${panelId} `, error);
+    throw new AppError(
+      `Failed to find panel with id: ${panelId} and error is: ${error}`,
+      500
+    );
+  }
+};
