@@ -17,7 +17,7 @@ export const GetAllTeams = CustomTryCatch(
     const { key, value } = request.query;
     const { user } = request;
     if (!user) {
-      console.error(`Team Id Is Not Given`);
+      console.error(`User Not Found in the request `);
       logger.error(`User Not Found in the request `, request?.user);
       throw new AppError(`You Are Not Authenticated`, 401);
     }

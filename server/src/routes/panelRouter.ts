@@ -4,6 +4,6 @@ import { GetUserPanelsController } from "../controllers/PanelController.js";
 
 const PanelRouter = express.Router();
 
-PanelRouter.get("/", CheckAuth, GetUserPanelsController);
+PanelRouter.get("/:teamId", CheckAuth, GetUserPanelsController);
 
 export default PanelRouter;
