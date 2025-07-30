@@ -1,26 +1,21 @@
 import { body } from "express-validator";
-import { isTeamWithSameName } from "../../services/TeamServivce.js";
 import { isPanelWithSameName } from "../../services/PanelService.js";
 import { AppError } from "../../utils/AppError.js";
 
-export function CreateValidatePanel() {
+export function UpdatePanelValidator() {
   return [
     body("panelName")
       .trim()
       .isLength({ min: 3 })
-      .notEmpty()
-      .withMessage("Panel Name Should Not Be Empty")
+      .optional()
       .custom(async (panelName) => {
         const exists = await isPanelWithSameName(panelName);
         if (exists) {
-        throw new AppError("Panel Name already in use",404);
+          throw new AppError("Panel Name already in use", 404);
         }
         return true;
       }),
-    body("panelDescription")
-      .trim()
-      .notEmpty()
-      .withMessage("Panel Description Should Not Be Empty"),
+    body("panelDescription").trim().optional(),
     body("panelIcon").trim().optional(),
     body("panelCoverPic").trim().optional(),
     body("panelTags").optional(),

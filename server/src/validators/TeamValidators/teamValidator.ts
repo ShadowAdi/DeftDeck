@@ -1,5 +1,6 @@
 import { body } from "express-validator";
 import { isTeamWithSameName } from "../../services/TeamServivce.js";
+import { AppError } from "../../utils/AppError.js";
 
 export function CreateValidateTeam() {
   return [
@@ -11,7 +12,7 @@ export function CreateValidateTeam() {
       .custom(async (teamName) => {
         const exists = await isTeamWithSameName(teamName);
         if (exists) {
-          throw new Error("Team Name already in use");
+            throw new AppError("Team Name already in use",404);
         }
         return true;
       }),

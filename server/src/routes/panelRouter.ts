@@ -5,9 +5,11 @@ import {
   DeletePanelController,
   GetUserPanelController,
   GetUserPanelsController,
+  UpdatePanelController,
 } from "../controllers/PanelController.js";
 import { CreateValidatePanel } from "../validators/PanelValidators/PanelValidator.js";
 import { ValidateRequest } from "../middlewares/ValidateRequest.js";
+import { UpdatePanelValidator } from "../validators/PanelValidators/UpdatePanelValidate.js";
 
 const PanelRouter = express.Router();
 
@@ -21,10 +23,10 @@ PanelRouter.post(
 );
 PanelRouter.patch(
   "/panel/:teamId",
-  CreateValidatePanel(),
+  UpdatePanelValidator(),
   ValidateRequest,
   CheckAuth,
-  DeletePanelController
+  UpdatePanelController
 );
 PanelRouter.delete("/panel/:teamId", CheckAuth, DeletePanelController);
 PanelRouter.get("/panel/:teamId", CheckAuth, GetUserPanelController);

@@ -1,6 +1,9 @@
 import { logger } from "../config/loggerConfig.js";
 import { PanelModel } from "../models/PanelModel.js";
-import { CreatePanelDataInterface } from "../types/panel/PanelData.js";
+import {
+  CreatePanelDataInterface,
+  UpdatePanelDataInterface,
+} from "../types/panel/PanelData.js";
 import { AppError } from "../utils/AppError.js";
 
 export const GetAllPanelsService = async (
@@ -53,7 +56,7 @@ export const IsPanelExist = async (userId: String, panelId: string) => {
       _id: panelId,
     });
     if (panelFound) {
-        return true
+      return true;
     }
     return false;
   } catch (error) {
@@ -65,7 +68,6 @@ export const IsPanelExist = async (userId: String, panelId: string) => {
     );
   }
 };
-
 
 export const CreatePanelService = async (
   teamId: string,
@@ -92,5 +94,43 @@ export const DeletePanelService = async (panelId: string) => {
     logger.error(`Failed to delete panel` + error);
     console.error(`Failed to delete panel`, error);
     throw new AppError(`Failed to delete panel and error is: ${error}`, 500);
+  }
+};
+
+export const UpdatePanelService = async (
+  panelId: string,
+  panelData: UpdatePanelDataInterface
+) => {
+  try {
+    const updatedPanel = await PanelModel.findByIdAndUpdate(
+      panelId,
+      panelData,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    return updatedPanel;
+  } catch (error) {
+    logger.error(`Failed to update panel` + error);
+    console.error(`Failed to update panel`, error);
+    throw new AppError(`Failed to update panel and error is: ${error}`, 500);
+  }
+};
+
+export const isPanelWithSameName = async (panelName: string) => {
+  try {
+    const panelFound = await PanelModel.findOne({ panelName });
+    if (panelFound) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    logger.error(`Failed to get team with the name:${panelName} ` + error);
+    console.error(`Failed to get team with the name:${panelName} `, error);
+    throw new AppError(
+      `Failed to get team with the name:${panelName} and error is: ${error}`,
+      500
+    );
   }
 };

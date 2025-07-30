@@ -9,6 +9,7 @@ import {
   GetAllPanelsService,
   GetPanelService,
   IsPanelExist,
+  UpdatePanelService,
 } from "../services/PanelService.js";
 
 export const GetUserPanelsController = CustomTryCatch(
@@ -123,6 +124,49 @@ export const CreatePanelController = CustomTryCatch(
       success: true,
       messaged: "Panel is Created",
       createPanelData,
+    });
+  }
+);
+
+export const UpdatePanelController = CustomTryCatch(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const { panelId } = request.params;
+    const { user } = request;
+    if (!user) {
+      console.error(`User Not Found in the request`);
+      logger.error(`User Not Found in the request `, request?.user);
+      throw new AppError(`You Are Not Authenticated`, 401);
+    }
+    const { email, sub } = user;
+    const userDetail = await IsUserExists(email);
+    if (!userDetail) {
+      logger.error(`User with the email:${email} don't exists`);
+      throw new AppError(`User with the email:${email} don't exists`, 401);
+    }
+
+    if (!panelId) {
+      logger.error(
+        `Panel id is not given it was required to get panel `,
+        panelId
+      );
+      console.error(`Panel id is not given it was required to get panel`);
+      throw new AppError(
+        `Panel id is not given it was required to get panel`,
+        402
+      );
+    }
+
+    const isPanelExist = await IsPanelExist(sub, panelId);
+    if (!isPanelExist) {
+      logger.error(`Panel with this id:${panelId} dont exist `, panelId);
+      console.error(`Panel with this id:${panelId} dont exist `);
+      throw new AppError(`Panel with this id:${panelId} dont exist `, 402);
+    }
+    const panelData = request.body;
+    const message = await UpdatePanelService(panelId, panelData);
+    return response.status(200).json({
+      success: true,
+      message,
     });
   }
 );
