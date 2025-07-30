@@ -9,7 +9,6 @@ import {
   GetAllTeamsService,
   GetTeamService,
   isTeamExist,
-  isTeamWithSameName,
   UpdateTeamService,
 } from "../services/TeamServivce.js";
 
