@@ -28,11 +28,6 @@ export const UserSchema = new mongoose.Schema(
       ref: "Team",
       default: [],
     },
-    panels: {
-      type: [Types.ObjectId],
-      ref: "Panel",
-      default: [],
-    },
   },
   {
     timestamps: true,
