@@ -38,7 +38,7 @@ export const TeamSchema = new Schema({
         role: {
           type: String,
           enum: ["ADMIN", "VIEWER", "EDITOR"],
-          default: "VIEWER", // ✅ fix: not an array
+          default: "VIEWER", 
         },
       },
     ],
