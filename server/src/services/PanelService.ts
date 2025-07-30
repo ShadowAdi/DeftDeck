@@ -1,5 +1,6 @@
 import { logger } from "../config/loggerConfig.js";
 import { PanelModel } from "../models/PanelModel.js";
+import { CreatePanelDataInterface } from "../types/panel/PanelData.js";
 import { AppError } from "../utils/AppError.js";
 
 export const GetAllPanelsService = async (
@@ -42,5 +43,22 @@ export const GetPanelService = async (userId: String, panelId: string) => {
       `Failed to find panel with id: ${panelId} and error is: ${error}`,
       500
     );
+  }
+};
+
+export const CreatePanelService = async (
+  teamId: string,
+  userId: string,
+  panelData: CreatePanelDataInterface
+) => {
+  try {
+    const createPanelData = { teamId, createdBy: userId, ...panelData };
+    const newPanel = new PanelModel(createPanelData);
+    await newPanel.save();
+    return newPanel;
+  } catch (error) {
+    logger.error(`Failed to create panel` + error);
+    console.error(`Failed to create panel`, error);
+    throw new AppError(`Failed to create panel and error is: ${error}`, 500);
   }
 };

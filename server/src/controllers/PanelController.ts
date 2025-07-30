@@ -4,6 +4,7 @@ import { logger } from "../config/loggerConfig.js";
 import { AppError } from "../utils/AppError.js";
 import { IsUserExists } from "../services/UserServices.js";
 import {
+  CreatePanelService,
   GetAllPanelsService,
   GetPanelService,
 } from "../services/PanelService.js";
@@ -81,6 +82,45 @@ export const GetUserPanelController = CustomTryCatch(
     return response.status(200).json({
       success: true,
       panelFound,
+    });
+  }
+);
+
+export const CreatePanelController = CustomTryCatch(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const { teamId } = request.params;
+
+    const { user } = request;
+    if (!user) {
+      console.error(`User Not Found in the request`);
+      logger.error(`User Not Found in the request `, request?.user);
+      throw new AppError(`You Are Not Authenticated`, 401);
+    }
+    const { email, sub } = user;
+    const userDetail = await IsUserExists(email);
+    if (!userDetail) {
+      logger.error(`User with the email:${email} don't exists`);
+      throw new AppError(`User with the email:${email} don't exists`, 401);
+    }
+
+    if (!teamId) {
+      logger.error(
+        `Team id is not given it was required to get panel `,
+        teamId
+      );
+      console.error(`Team id is not given it was required to get panel`);
+      throw new AppError(
+        `Team id is not given it was required to get panel`,
+        402
+      );
+    }
+
+    const panelData = request.body;
+    const createPanelData = await CreatePanelService(teamId, sub, panelData);
+    return response.status(201).json({
+      success: true,
+      messaged: "Panel is Created",
+      createPanelData,
     });
   }
 );

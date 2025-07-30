@@ -1,5 +1,9 @@
 import { logger } from "../config/loggerConfig.js";
 import { TeamModel } from "../models/TeamsModel.js";
+import {
+  CreateTeamDataInterface,
+  UpdateTeamDataInterface,
+} from "../types/teams/TeamData.js";
 import { AppError } from "../utils/AppError.js";
 
 export const GetAllTeamsService = async (
@@ -43,19 +47,14 @@ export const GetTeamService = async (teamId: string) => {
 };
 
 export const CreateTeamService = async (
-  teamData: {
-    teamName: string;
-    teamDescription: string;
-    teamImage: string;
-    teamTags: [string];
-  },
+  teamData: CreateTeamDataInterface,
   userId: string
 ) => {
   try {
     const createTeamData = { ownerId: userId, ...teamData };
     const createdTeam = new TeamModel(createTeamData);
     await createdTeam.save();
-    return createTeamData;
+    return createdTeam;
   } catch (error) {
     logger.error(`Failed to create team` + error);
     console.error(`Failed to create team`, error);
@@ -64,12 +63,7 @@ export const CreateTeamService = async (
 };
 
 export const UpdateTeamService = async (
-  teamData: {
-    teamName: string;
-    teamDescription: string;
-    teamImage: string;
-    teamTags: [string];
-  },
+  teamData: UpdateTeamDataInterface,
   teamId: string
 ) => {
   try {
