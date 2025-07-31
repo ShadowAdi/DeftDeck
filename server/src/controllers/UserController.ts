@@ -30,7 +30,6 @@ export const CreateUser = CustomTryCatch(
     return response.status(201).json({
       success: true,
       message: "User Created successfully.",
-      data: userCreated,
     });
   }
 );

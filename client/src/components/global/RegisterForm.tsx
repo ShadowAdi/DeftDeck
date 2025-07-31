@@ -15,6 +15,8 @@ import {
 } from "../ui/form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { logger } from "@/config/loggerConfig";
+import { axiosInstance } from "@/config/AxiosInstance";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -33,7 +35,18 @@ const RegisterForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const response = await axiosInstance.post("", values);
+      const data = await response.data;
+      if (data.success) {
+        logger.info(`User With email: ${values.email} registered successfully`);
+      }
+    } catch (error) {
+      console.error(`Error in registering user `, error);
+      logger.error(`Error in registering user `, error);
+    }
+  }
   return (
     <div className="w-full flex flex-col">
       <Form {...form}>
