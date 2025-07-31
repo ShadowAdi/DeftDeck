@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { logger } from "@/config/loggerConfig";
 import { axiosInstance } from "@/config/AxiosInstance";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -41,10 +42,15 @@ const RegisterForm = () => {
       const data = await response.data;
       if (data.success) {
         logger.info(`User With email: ${values.email} registered successfully`);
+        toast("User Has been registered");
+      } else {
+        logger.error(data.error);
+        toast.error(`Failed to create User`);
       }
     } catch (error) {
       console.error(`Error in registering user `, error);
       logger.error(`Error in registering user `, error);
+      toast.error(`Failed to create User`);
     }
   }
   return (

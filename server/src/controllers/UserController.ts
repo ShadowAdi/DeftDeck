@@ -26,7 +26,7 @@ export const GetAllUsers = CustomTryCatch(
 export const CreateUser = CustomTryCatch(
   async (request: Request, response: Response, next: NextFunction) => {
     const userData = request.body;
-    const userCreated = await CreateUserService(userData);
+     await CreateUserService(userData);
     return response.status(201).json({
       success: true,
       message: "User Created successfully.",
