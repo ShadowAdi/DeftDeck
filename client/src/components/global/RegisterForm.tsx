@@ -15,21 +15,14 @@ import {
 } from "../ui/form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { logger } from "@/config/loggerConfig";
-import { axiosInstance } from "@/config/AxiosInstance";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { RegisterFormData } from "@/schemas/authSchema/authSchema";
+import { handleRegisterUser } from "@/services/register/register.service";
 
-const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  email: z.email(),
-  password: z.string().min(3),
-  companyName: z.string().optional(),
-});
 const RegisterForm = () => {
   const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof RegisterFormData>>({
+    resolver: zodResolver(RegisterFormData),
     defaultValues: {
       companyName: "",
       email: "",
@@ -38,23 +31,8 @@ const RegisterForm = () => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const response = await axiosInstance.post("", values);
-      const data = await response.data;
-      if (data.success) {
-        logger.info(`User With email: ${values.email} registered successfully`);
-        toast("User Has been registered");
-        router.push("/login");
-      } else {
-        logger.error(data.error);
-        toast.error(`Failed to create User`);
-      }
-    } catch (error) {
-      console.error(`Error in registering user `, error);
-      logger.error(`Error in registering user `, error);
-      toast.error(`Failed to create User`);
-    }
+  async function onSubmit(values: z.infer<typeof RegisterFormData>) {
+    await handleRegisterUser({ values, router });
   }
   return (
     <div className="w-full flex flex-col">

@@ -15,43 +15,23 @@ import {
 } from "../ui/form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { logger } from "@/config/loggerConfig";
-import { axiosInstance } from "@/config/AxiosInstance";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { LoginFormData } from "@/schemas/authSchema/authSchema";
+import { handleLoginUser } from "@/services/register/login.service";
 
-const formSchema = z.object({
-  email: z.email(),
-  password: z.string().min(3),
-});
 const LoginForm = () => {
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof LoginFormData>>({
+    resolver: zodResolver(LoginFormData),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const response = await axiosInstance.post("login/", values);
-      const data = await response.data;
-      if (data.success) {
-        logger.info(`User With email: ${values.email} login successfully`);
-        toast("User Has been login");
-        router.push("/home");
-      } else {
-        logger.error(data.error);
-        toast.error(`Failed to login User`);
-      }
-    } catch (error) {
-      console.error(`Error in login user `, error);
-      logger.error(`Error in login user `, error);
-      toast.error(`Failed to login User`);
-    }
+  async function onSubmit(values: z.infer<typeof LoginFormData>) {
+ await  handleLoginUser({values,router})
   }
   return (
     <div className="w-full flex flex-col">
@@ -83,7 +63,6 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-
           <Button type="submit">Submit</Button>
         </form>
       </Form>
