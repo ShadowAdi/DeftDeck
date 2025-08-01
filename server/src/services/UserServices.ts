@@ -3,16 +3,21 @@ import { UserModel } from "../models/UserModel.js";
 import { AppError } from "../utils/AppError.js";
 import bcrypt from "bcrypt";
 import { TokenGenerator } from "../utils/TokenGenerator.js";
-import nodemailer from "nodemailer";
 import crypto from "crypto";
-import { GOOGLE_PASSWORD } from "../config/DotEnvConfig.js";
+import { sendVerificationEmail } from "../config/EmailConfig.js";
+import mongoose from "mongoose";
+
 export const GetAllUsersService = async (
   query: { key: string; value: string } | {}
 ) => {
   try {
     const filter =
       "key" in query && "value" in query ? { [query.key]: query.value } : {};
-    const users = await UserModel.find(filter);
+    const users = await UserModel.find(filter)
+      .select(
+        "-v -password -isEmailVerified -verificationToken -emailVerificationSentAt -emailVerifiedAt -teams"
+      )
+      .lean();
     return users;
   } catch (error) {
     logger.error(`Failed to get all users ${error}` + error);
@@ -26,8 +31,37 @@ export const GetAllUsersService = async (
 
 export const GetUserService = async (userId: string) => {
   try {
-    const user = await UserModel.findById(userId);
-    return user;
+    if (!userId) throw new AppError("User ID required", 400);
+
+    const user = await UserModel.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(userId) },
+      },
+      {
+        $project: {
+          v: 0,
+          password: 0,
+          verificationToken: 0,
+          emailVerificationSentAt: 0,
+          emailVerifiedAt: 0,
+        },
+      },
+      {
+        $lookup: {
+          from: "teams",
+          localField: "_id",
+          foreignField: "ownerId",
+          as: "ownedTeams",
+        },
+      },
+    ]);
+
+    if (!user || user.length === 0) {
+      logger.error(`Failed to get user with this id: ${userId} `);
+      console.error(`Failed to get user with this id: ${userId}`);
+      throw new AppError(`Failed to get user with this id: ${userId}`, 500);
+    }
+    return user[0];
   } catch (error) {
     logger.error(`Failed to get user with this id: ${userId} ` + error);
     console.error(`Failed to get user with this id: ${userId} `, error);
@@ -58,24 +92,7 @@ export const CreateUserService = async (userData: {
       emailVerificationSentAt: new Date(),
     });
     await user.save();
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "shadowshukla76@gmail.com",
-        pass: GOOGLE_PASSWORD,
-      },
-    });
-    const verificationUrl = `http://localhost:3000/verify-email?token=${verificationToken}`;
-    await transporter.sendMail({
-      from: '"Aditya Shukla" <shadowshukla76@gmail.com>',
-      to: userData.email,
-      subject: "Verify your email",
-      html: `
-    <h1>Email Verification</h1>
-    <p>Click the link below to verify your email:</p>
-    <a href="${verificationUrl}">Verify Email</a>
-  `,
-    });
+    await sendVerificationEmail(userData.email, verificationToken);
     return user;
   } catch (error) {
     logger.error(`Failed to create user: ` + error);

@@ -5,10 +5,13 @@ export const UserSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+      index: true,
     },
     email: {
       type: String,
       required: true,
+      index: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -22,6 +25,7 @@ export const UserSchema = new mongoose.Schema(
     companyName: {
       type: String,
       required: true,
+      index: true,
     },
     teams: {
       type: [Types.ObjectId],
@@ -34,6 +38,8 @@ export const UserSchema = new mongoose.Schema(
     },
     verificationToken: {
       type: String,
+      index: true,
+      unique: true,
     },
     emailVerificationSentAt: {
       type: Date,
