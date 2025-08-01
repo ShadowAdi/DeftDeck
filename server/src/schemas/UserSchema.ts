@@ -28,6 +28,19 @@ export const UserSchema = new mongoose.Schema(
       ref: "Team",
       default: [],
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
+    emailVerificationSentAt: {
+      type: Date,
+    },
+    emailVerifiedAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,

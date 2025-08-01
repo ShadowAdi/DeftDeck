@@ -3,7 +3,9 @@ import { UserModel } from "../models/UserModel.js";
 import { AppError } from "../utils/AppError.js";
 import bcrypt from "bcrypt";
 import { TokenGenerator } from "../utils/TokenGenerator.js";
-
+import nodemailer from "nodemailer";
+import crypto from "crypto";
+import { GOOGLE_PASSWORD } from "../config/DotEnvConfig.js";
 export const GetAllUsersService = async (
   query: { key: string; value: string } | {}
 ) => {
@@ -44,6 +46,7 @@ export const CreateUserService = async (userData: {
   companyName: string;
 }) => {
   try {
+    const verificationToken = crypto.randomBytes(32).toString("hex");
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const user = new UserModel({
       email: userData.email,
@@ -51,8 +54,28 @@ export const CreateUserService = async (userData: {
       password: hashedPassword,
       companyName: userData.companyName,
       profileUrl: userData?.profileUrl,
+      verificationToken: verificationToken,
+      emailVerificationSentAt: new Date(),
     });
     await user.save();
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "shadowshukla76@gmail.com",
+        pass: GOOGLE_PASSWORD,
+      },
+    });
+    const verificationUrl = `http://localhost:3000/verify-email?token=${verificationToken}`;
+    await transporter.sendMail({
+      from: '"Aditya Shukla" <shadowshukla76@gmail.com>',
+      to: userData.email,
+      subject: "Verify your email",
+      html: `
+    <h1>Email Verification</h1>
+    <p>Click the link below to verify your email:</p>
+    <a href="${verificationUrl}">Verify Email</a>
+  `,
+    });
     return user;
   } catch (error) {
     logger.error(`Failed to create user: ` + error);
