@@ -23,7 +23,7 @@ export const GetAllPanelsService = async (
       teamId: teamId,
       createdBy: userId,
       ...filter,
-    });
+    }).lean();
     return panels;
   } catch (error) {
     logger.error(`Failed to find panels: ` + error);
@@ -37,7 +37,7 @@ export const GetPanelService = async (userId: String, panelId: string) => {
     const panelFound = await PanelModel.find({
       createdBy: userId,
       _id: panelId,
-    });
+    }).lean();
     return panelFound;
   } catch (error) {
     logger.error(`Failed to find panel with id: ${panelId} ` + error);

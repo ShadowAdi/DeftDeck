@@ -18,7 +18,7 @@ export const GetAllTeamsService = async (
   try {
     const filter =
       "key" in query && "value" in query ? { [query.key]: query.value } : {};
-    const teams = await TeamModel.find({ ownerId: userId, ...filter });
+    const teams = await TeamModel.find({ ownerId: userId, ...filter }).lean();
     return teams;
   } catch (error) {
     logger.error(`Failed to find teams: ` + error);
@@ -29,7 +29,7 @@ export const GetAllTeamsService = async (
 
 export const GetTeamService = async (teamId: string) => {
   try {
-    const teamFound = await TeamModel.findById(teamId);
+    const teamFound = await TeamModel.findById(teamId).lean();
     if (!teamFound) {
       logger.error(`Team Not Found`);
       console.error(`Team Not Found`);
