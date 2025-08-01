@@ -11,7 +11,10 @@ export const DBConnect = async (server: Server) => {
     });
   }
   try {
-    await mongoose.connect(MONGODB_URL!);
+    await mongoose.connect(MONGODB_URL!,{
+      maxPoolSize:50,
+      minPoolSize:5
+    });
     logger.info("✅ Connected to MongoDB.");
   } catch (error) {
     logger.error("❌ DB connection failed:", error);

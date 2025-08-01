@@ -155,7 +155,7 @@ export const IsUserExistForToken = async (token: string) => {
 
 export const IsEmailTaken = async (email: string) => {
   try {
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.exists({ email });
     return !!user;
   } catch (error) {
     logger.error(`Failed to find user with email:${email} ` + error);

@@ -5,16 +5,19 @@ export const PanelSchema = new mongoose.Schema(
     panelName: {
       type: String,
       required: true,
+      index: true,
     },
     teamId: {
       type: Types.ObjectId,
       ref: "Team",
       required: true,
+      index: true,
     },
     createdBy: {
       type: Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
     panelDescription: {
       type: String,
@@ -29,6 +32,7 @@ export const PanelSchema = new mongoose.Schema(
     panelTags: {
       type: [String],
       default: [],
+      index: true,
     },
     panelColor: {
       type: String,
@@ -41,6 +45,7 @@ export const PanelSchema = new mongoose.Schema(
     isEditable: {
       type: Boolean,
       default: false,
+      index: true,
     },
   },
   {

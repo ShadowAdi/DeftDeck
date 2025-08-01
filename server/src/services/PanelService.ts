@@ -51,7 +51,7 @@ export const GetPanelService = async (userId: String, panelId: string) => {
 
 export const IsPanelExist = async (userId: String, panelId: string) => {
   try {
-    const panelFound = await PanelModel.find({
+    const panelFound = await PanelModel.exists({
       createdBy: userId,
       _id: panelId,
     });
@@ -120,7 +120,7 @@ export const UpdatePanelService = async (
 
 export const isPanelWithSameName = async (panelName: string) => {
   try {
-    const panelFound = await PanelModel.findOne({ panelName });
+    const panelFound = await PanelModel.exists({ panelName });
     if (panelFound) {
       return true;
     }

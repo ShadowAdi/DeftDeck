@@ -7,11 +7,13 @@ export const CardSchema = new mongoose.Schema(
       enum: ["LINK", "INFO", "CHECKLIST", "SNIPPET", "FILE"],
       required: true,
       default: "LINK",
+      index: true,
     },
 
     cardTitle: {
       type: String,
       required: true,
+      index: true,
     },
 
     cardDescription: {
@@ -63,23 +65,27 @@ export const CardSchema = new mongoose.Schema(
     cardTags: {
       type: [String],
       default: [],
+      index: true,
     },
 
     isEditable: {
       type: Boolean,
       default: false,
+      index: true,
     },
 
     creator: {
       type: Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
 
     cardPanel: {
       type: Types.ObjectId,
       ref: "Panel",
       required: true,
+      index: true,
     },
   },
   {

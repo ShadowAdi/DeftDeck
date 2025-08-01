@@ -6,6 +6,7 @@ export const TeamSchema = new Schema({
   teamName: {
     type: String,
     required: true,
+    index:true
   },
   teamMembers: {
     type: Number,
@@ -21,11 +22,15 @@ export const TeamSchema = new Schema({
   teamTags: {
     type: [String],
     default: [],
+        index:true
+
   },
   ownerId: {
     type: Types.ObjectId,
     ref: "User",
     required: true,
+        index:true
+
   },
   members: {
     type: [
