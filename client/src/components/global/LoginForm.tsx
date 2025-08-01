@@ -21,58 +21,42 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string().min(2).max(50),
   email: z.email(),
   password: z.string().min(3),
-  companyName: z.string().optional(),
 });
-const RegisterForm = () => {
+const LoginForm = () => {
   const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      companyName: "",
       email: "",
-      name: "",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await axiosInstance.post("", values);
+      const response = await axiosInstance.post("login/", values);
       const data = await response.data;
       if (data.success) {
-        logger.info(`User With email: ${values.email} registered successfully`);
-        toast("User Has been registered");
-        router.push("/login");
+        logger.info(`User With email: ${values.email} login successfully`);
+        toast("User Has been login");
+        router.push("/home");
       } else {
         logger.error(data.error);
-        toast.error(`Failed to create User`);
+        toast.error(`Failed to login User`);
       }
     } catch (error) {
-      console.error(`Error in registering user `, error);
-      logger.error(`Error in registering user `, error);
-      toast.error(`Failed to create User`);
+      console.error(`Error in login user `, error);
+      logger.error(`Error in login user `, error);
+      toast.error(`Failed to login User`);
     }
   }
   return (
     <div className="w-full flex flex-col">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Aditya" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"
@@ -99,19 +83,7 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="companyName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Company Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Google" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
           <Button type="submit">Submit</Button>
         </form>
       </Form>
@@ -119,4 +91,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;
