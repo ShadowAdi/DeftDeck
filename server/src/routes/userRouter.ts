@@ -6,6 +6,7 @@ import {
   GetAllUsers,
   LoginUser,
   UpdatedUser,
+  VerifyUser,
 } from "../controllers/UserController.js";
 import { CreateValidateUser } from "../validators/UserValidators/userValidator.js";
 import { ValidateRequest } from "../middlewares/ValidateRequest.js";
@@ -18,6 +19,7 @@ const UserRouter = express.Router();
 UserRouter.get("/", GetAllUsers);
 UserRouter.post("/", CreateValidateUser(), ValidateRequest, CreateUser);
 UserRouter.post("/login", userLoginValidator(), ValidateRequest, LoginUser);
+UserRouter.get("/verify-email", VerifyUser);
 UserRouter.get("/me", CheckAuth, authenticatedUser);
 UserRouter.delete("/me", CheckAuth, DeleteUser);
 UserRouter.patch(

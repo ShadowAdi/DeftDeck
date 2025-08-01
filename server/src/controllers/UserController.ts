@@ -4,6 +4,7 @@ import {
   CreateUserService,
   DeleteUserService,
   GetAllUsersService,
+  IsUserExistForToken,
   IsUserExists,
   LoginUserService,
   UpdateUserService,
@@ -26,7 +27,7 @@ export const GetAllUsers = CustomTryCatch(
 export const CreateUser = CustomTryCatch(
   async (request: Request, response: Response, next: NextFunction) => {
     const userData = request.body;
-     await CreateUserService(userData);
+    await CreateUserService(userData);
     return response.status(201).json({
       success: true,
       message: "User Created successfully.",
@@ -43,6 +44,22 @@ export const LoginUser = CustomTryCatch(
       message: "User Login successfully.",
       data: isUser,
       token,
+    });
+  }
+);
+
+export const VerifyUser = CustomTryCatch(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const { token } = request.query;
+    if (!token) {
+      logger.error(`Token Do Not Found In query`);
+      console.error(`Token Do Not Found In query`);
+      throw new AppError(`Token Do Not Found In query`, 500);
+    }
+    await IsUserExistForToken(String(token));
+    return response.status(200).json({
+      success: true,
+      message: `User Verified Successfully`,
     });
   }
 );

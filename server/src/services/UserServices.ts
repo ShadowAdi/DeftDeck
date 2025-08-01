@@ -113,6 +113,29 @@ export const LoginUserService = async (userData: {
   }
 };
 
+export const IsUserExistForToken = async (token: string) => {
+  try {
+    const isUserExist = await UserModel.findOne({ verificationToken: token });
+    if (!isUserExist) {
+      logger.error(`Failed to find user with token: ${token} `);
+      console.error(`Failed to find user with token: ${token} `);
+      throw new AppError(`Failed to find user with token: ${token} `, 500);
+    }
+    isUserExist.isEmailVerified = true;
+    isUserExist.verificationToken = undefined;
+    isUserExist.emailVerifiedAt = new Date();
+    await isUserExist.save();
+    return true;
+  } catch (error) {
+    logger.error(`Failed to verify user with token: ${token} `, error);
+    console.error(`Failed to verify user with token: ${token} `, error);
+    throw new AppError(
+      `Failed to verify user with token: ${token} and error is: ${error}`,
+      500
+    );
+  }
+};
+
 export const IsEmailTaken = async (email: string) => {
   try {
     const user = await UserModel.findOne({ email });
