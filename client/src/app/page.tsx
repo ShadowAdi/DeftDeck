@@ -1,11 +1,12 @@
+import Hero from "@/components/pages/home/Hero";
 import React from "react";
 
-const Homes = () => {
+const Home = () => {
   return (
-    <main className="flex flex-col min-h-screen w-full ">
-      <h1 className="text-4xl text-black font-semibold">DeftDeck</h1>
+    <main className="flex flex-col md:flex-row py-12 px-8 min-h-screen w-full bg-[#f7f3ed] items-center justify-center max-w-[1440px]">
+      <Hero />
     </main>
   );
 };
 
-export default Homes;
+export default Home;

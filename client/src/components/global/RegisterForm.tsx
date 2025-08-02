@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { z } from "zod";
@@ -18,9 +18,12 @@ import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
 import { RegisterFormData } from "@/schemas/authSchema/authSchema";
 import { handleRegisterUser } from "@/services/register/register.service";
+import { EyeClosed, EyeIcon } from "lucide-react";
 
 const RegisterForm = () => {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
   const form = useForm<z.infer<typeof RegisterFormData>>({
     resolver: zodResolver(RegisterFormData),
     defaultValues: {
@@ -35,14 +38,14 @@ const RegisterForm = () => {
     await handleRegisterUser({ values, router });
   }
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col items-center justify-center">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col items-center justify-center">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Aditya" {...field} />
@@ -55,7 +58,7 @@ const RegisterForm = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input placeholder="Email" type="email" {...field} />
@@ -68,10 +71,27 @@ const RegisterForm = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="*****" type="password" {...field} />
+                  <div className="relative">
+                    <Input
+                      placeholder="*****"
+                      type={showPassword ? "password" : "text"}
+                      {...field}
+                    />
+                    {!showPassword ? (
+                      <EyeIcon
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black-500 cursor-pointer"
+                        onClick={() => setShowPassword(true)}
+                      />
+                    ) : (
+                      <EyeClosed
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black-500 cursor-pointer"
+                        onClick={() => setShowPassword(false)}
+                      />
+                    )}
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -81,7 +101,7 @@ const RegisterForm = () => {
             control={form.control}
             name="companyName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Company Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Google" {...field} />
@@ -90,7 +110,7 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" className="mx-auto">Submit</Button>
         </form>
       </Form>
     </div>
