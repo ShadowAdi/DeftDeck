@@ -16,10 +16,14 @@ export const handleRegisterUser = async ({
     const data = response.data;
 
     if (data.success) {
-      toast.success("User has been registered");
+      toast.success(data.message);
       router.push("/login");
+      values.companyName=""
+      values.password=""
+      values.email=""
+      values.name=""
     } else {
-      toast.error("Failed to create user");
+      toast.error(data.message);
     }
   } catch (error) {
     console.error("Error in registering user", error);

@@ -18,9 +18,11 @@ export const handleLoginUser = async ({
     const data = await response.data;
     if (data.success) {
       if (data.token) {
-        toast("User Has been login");
+        toast(data.message);
         login(data.token);
         router.push("/home");
+        values.password = "";
+        values.email = "";
       } else {
         toast.error(data.message);
       }

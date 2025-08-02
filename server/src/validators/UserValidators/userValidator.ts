@@ -7,8 +7,8 @@ export function CreateValidateUser() {
       .trim()
       .isLength({ min: 3 })
       .toLowerCase()
-      .isAlpha()
-      .withMessage("Name must contain only alphabetical characters")
+      .matches(/^[a-zA-Z\s]+$/)
+      .withMessage("Name must contain only letters and spaces")
       .notEmpty()
       .withMessage("Name Should Not Be Empty"),
     body("email")
