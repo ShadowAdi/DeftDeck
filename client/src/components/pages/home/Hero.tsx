@@ -3,9 +3,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { AuthStore } from "@/store/AuthStore";
 
 const Hero = () => {
   const router = useRouter();
+  const { isAuthenticated } = AuthStore();
   return (
     <motion.div
       className="flex flex-col items-center space-y-6 w-full"
@@ -19,14 +21,26 @@ const Hero = () => {
         Create, organize, and collaborate on tasks, designs, code, and files in
         one unified deck.
       </p>
-      <Button
-        onClick={() => {
-          router.push("/register");
-        }}
-        className="px-6 py-3 transition-all duration-500 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white rounded-lg font-semibold"
-      >
-        Get Started
-      </Button>
+
+      {isAuthenticated ? (
+        <Button
+          onClick={() => {
+            router.push("/home");
+          }}
+          className="bg-white text-[var(--primary)] px-6 py-2 rounded-full text-base font-medium border border-[var(--primary)]  transition-colors cursor-pointer "
+        >
+          Home
+        </Button>
+      ) : (
+        <Button
+          onClick={() => {
+            router.push("/register");
+          }}
+          className="px-6 py-3 transition-all duration-500 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white rounded-lg font-semibold"
+        >
+          Get Started
+        </Button>
+      )}
     </motion.div>
   );
 };
