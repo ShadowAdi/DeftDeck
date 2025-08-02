@@ -64,6 +64,23 @@ export const VerifyUser = CustomTryCatch(
   }
 );
 
+
+export const ResendEmail = CustomTryCatch(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const { token } = request.query;
+    if (!token) {
+      logger.error(`Token Do Not Found In query`);
+      console.error(`Token Do Not Found In query`);
+      throw new AppError(`Token Do Not Found In query`, 500);
+    }
+    await IsUserExistForToken(String(token));
+    return response.status(200).json({
+      success: true,
+      message: `User Verified Successfully`,
+    });
+  }
+);
+
 export const authenticatedUser = CustomTryCatch(
   async (request: Request, response: Response, next: NextFunction) => {
     const { user } = request;
