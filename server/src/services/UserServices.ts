@@ -113,6 +113,9 @@ export const LoginUserService = async (userData: {
         404
       );
     }
+    if (!isUser.isEmailVerified) {
+      throw new AppError(`User Is Not Verified. Please Check Your Email`, 401);
+    }
     const isPasswordExists = await bcrypt.compare(
       userData.password,
       isUser?.password

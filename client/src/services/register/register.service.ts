@@ -16,12 +16,11 @@ export const handleRegisterUser = async ({
     const data = response.data;
 
     if (data.success) {
-      toast.success(data.message);
-      router.push("/login");
-      values.companyName=""
-      values.password=""
-      values.email=""
-      values.name=""
+      toast.success("Please Check Your Mail");
+      values.companyName = "";
+      values.password = "";
+      values.email = "";
+      values.name = "";
     } else {
       toast.error(data.message);
     }
