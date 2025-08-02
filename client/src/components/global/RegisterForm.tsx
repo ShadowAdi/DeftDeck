@@ -40,7 +40,10 @@ const RegisterForm = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col items-center justify-center">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 w-full flex flex-col items-center justify-center"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -67,50 +70,54 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Input
-                      placeholder="*****"
-                      type={showPassword ? "password" : "text"}
-                      {...field}
-                    />
-                    {!showPassword ? (
-                      <EyeIcon
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black-500 cursor-pointer"
-                        onClick={() => setShowPassword(true)}
+          <div className="flex flex-col md:flex-row md:space-y-0 space-y-4 md:space-x-5 md:items-center w-full">
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className="w-full flex-1">
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        placeholder="*****"
+                        type={showPassword ? "password" : "text"}
+                        {...field}
                       />
-                    ) : (
-                      <EyeClosed
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black-500 cursor-pointer"
-                        onClick={() => setShowPassword(false)}
-                      />
-                    )}
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="companyName"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Company Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Google" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="mx-auto">Submit</Button>
+                      {!showPassword ? (
+                        <EyeIcon
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black-500 cursor-pointer"
+                          onClick={() => setShowPassword(true)}
+                        />
+                      ) : (
+                        <EyeClosed
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black-500 cursor-pointer"
+                          onClick={() => setShowPassword(false)}
+                        />
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="companyName"
+              render={({ field }) => (
+                <FormItem className="w-full flex-1">
+                  <FormLabel>Company Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Google" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button type="submit" className="mx-auto">
+            Submit
+          </Button>
         </form>
       </Form>
     </div>
