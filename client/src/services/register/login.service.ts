@@ -7,21 +7,28 @@ import z from "zod";
 export const handleLoginUser = async ({
   values,
   router,
+  login,
 }: {
   values: z.infer<typeof LoginFormData>;
   router: ReturnType<typeof useRouter>;
+  login: (token: string) => void;
 }) => {
   try {
-      const response = await axiosInstance.post("user/login/", values);
-      const data = await response.data;
-      if (data.success) {
+    const response = await axiosInstance.post("user/login/", values);
+    const data = await response.data;
+    if (data.success) {
+      if (data.token) {
         toast("User Has been login");
+        login(data.token);
         router.push("/home");
       } else {
-        toast.error(`Failed to login User`);
+        toast.error(data.message);
       }
-    } catch (error) {
-      console.error(`Error in login user `, error);
+    } else {
       toast.error(`Failed to login User`);
     }
+  } catch (error) {
+    console.error(`Error in login user `, error);
+    toast.error(`Failed to login User`);
+  }
 };

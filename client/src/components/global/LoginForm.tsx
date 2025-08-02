@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { LoginFormData } from "@/schemas/authSchema/authSchema";
 import { handleLoginUser } from "@/services/register/login.service";
 import { EyeClosed, EyeIcon } from "lucide-react";
+import { AuthStore } from "@/store/AuthStore";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -32,13 +33,18 @@ const LoginForm = () => {
     },
   });
 
+  const { login } = AuthStore();
+
   async function onSubmit(values: z.infer<typeof LoginFormData>) {
-    await handleLoginUser({ values, router });
+    await handleLoginUser({ values, router, login });
   }
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col items-center justify-center">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 w-full flex flex-col items-center justify-center"
+        >
           <FormField
             control={form.control}
             name="email"
