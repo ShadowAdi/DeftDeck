@@ -36,14 +36,14 @@ const LoginForm = () => {
     await handleLoginUser({ values, router });
   }
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col items-center justify-center">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col items-center justify-center">
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input placeholder="Email" type="email" {...field} />
@@ -56,7 +56,7 @@ const LoginForm = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <div className="relative">
