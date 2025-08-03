@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { PlusIcon } from "lucide-react";
 import React from "react";
+import { TeamType } from "@/types/TeamType";
 
 const TeamPreviewCard = () => {
   const router = useRouter();

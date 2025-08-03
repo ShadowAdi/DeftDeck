@@ -51,7 +51,11 @@ export const CreateTeamService = async (
   userId: string
 ) => {
   try {
-    const createTeamData = { ownerId: userId, ...teamData };
+    const createTeamData = {
+      ownerId: userId,
+      members: [{ member: userId, role: "ADMIN" }],
+      ...teamData,
+    };
     const createdTeam = new TeamModel(createTeamData);
     await createdTeam.save();
     return createdTeam;
