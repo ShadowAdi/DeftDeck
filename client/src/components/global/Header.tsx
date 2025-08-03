@@ -22,7 +22,7 @@ const Header = () => {
           onClick={() => {
             router.push("/home");
           }}
-          className="bg-white text-[var(--primary)] px-6 py-2 rounded-full text-base font-medium border border-[var(--primary)]  transition-colors cursor-pointer "
+          className="bg-white text-[var(--primary)] px-6 py-2 rounded-full text-base font-medium border border-[var(--primary)]  transition-colors cursor-pointer  hover:text-white "
         >
           Home
         </Button>
@@ -31,7 +31,7 @@ const Header = () => {
           onClick={() => {
             router.push("/login");
           }}
-          className="bg-[var(--primary)] text-white px-5 py-2 rounded-full text-base font-medium hover:bg-[var(--primary-hover)] transition-colors cursor-pointer"
+          className="bg-[var(--primary)] text-white hover:text-white px-5 py-2 rounded-full text-base font-medium hover:bg-[var(--primary-hover)] transition-colors cursor-pointer"
         >
           SignIn
         </Button>

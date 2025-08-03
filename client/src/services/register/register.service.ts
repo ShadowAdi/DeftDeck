@@ -21,6 +21,7 @@ export const handleRegisterUser = async ({
       values.password = "";
       values.email = "";
       values.name = "";
+      router.push("/verify-email")
     } else {
       toast.error(data.message);
     }

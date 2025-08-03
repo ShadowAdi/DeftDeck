@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { handleVerifyUser } from "@/services/verify-email/verify-email.service";
 
 const VerifyEmail = () => {
-  const search= useSearchParams();
+  const search = useSearchParams();
   const token = search.get("token");
   const router = useRouter();
   useEffect(() => {
