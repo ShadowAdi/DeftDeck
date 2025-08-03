@@ -6,7 +6,7 @@ import { MailCheck, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { handleVerifyUser } from "@/services/(auth)/verify-email/verify-email.service";
+import { handleVerifyUser } from "@/services/auth/verify-email/verify-email.service";
 
 const VerifyEmail = () => {
   const search = useSearchParams();
