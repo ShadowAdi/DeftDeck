@@ -17,7 +17,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
 import { LoginFormData } from "@/schemas/authSchema/authSchema";
-import { handleLoginUser } from "@/services/login/login.service";
+import { handleLoginUser } from "@/services/(auth)/login/login.service";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import { AuthStore } from "@/store/AuthStore";
 

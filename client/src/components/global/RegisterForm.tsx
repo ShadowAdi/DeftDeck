@@ -17,7 +17,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
 import { RegisterFormData } from "@/schemas/authSchema/authSchema";
-import { handleRegisterUser } from "@/services/register/register.service";
+import { handleRegisterUser } from "@/services/(auth)/register/register.service";
 import { EyeClosed, EyeIcon } from "lucide-react";
 
 const RegisterForm = () => {
