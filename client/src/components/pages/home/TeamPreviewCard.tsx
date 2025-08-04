@@ -1,7 +1,6 @@
 import { useRouter } from "next/navigation";
 import { PlusIcon } from "lucide-react";
 import React from "react";
-import { TeamType } from "@/types/TeamType";
 
 const TeamPreviewCard = () => {
   const router = useRouter();
@@ -14,7 +13,7 @@ const TeamPreviewCard = () => {
     <div
       onClick={handleClick}
       className=" border-dashed border-2
- border-gray-200  hover:border-gray-300 transition-colors cursor-pointer rounded-xl flex flex-col items-center justify-center max-h-52  w-full max-w-md mx-auto shadow-sm hover:shadow-md "
+ border-gray-200  hover:border-gray-300 transition-colors cursor-pointer rounded-xl flex flex-col items-center justify-center h-64   w-full max-w-md mx-auto shadow-sm hover:shadow-md "
     >
       <div className="flex flex-row items-center justify-center space-x-3">
         <PlusIcon className="text-gray-700" />

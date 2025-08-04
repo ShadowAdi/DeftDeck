@@ -40,11 +40,17 @@ const CreateTeamForm = () => {
   const watchImage = form.watch("teamImage");
 
   async function onSubmit(values: z.infer<typeof CreateTeamFormData>) {
-    if (!isAuthenticated && !token) {
+    if (!isAuthenticated || !token) {
       router.push("/login");
+      return;
     }
-    form.setValue("teamTags", tags);
-    await CreateTeam({ values, router, token: token! });
+
+    const finalValues = {
+      ...values,
+      teamTags: tags,
+    };
+
+    await CreateTeam({ values: finalValues, router, token });
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

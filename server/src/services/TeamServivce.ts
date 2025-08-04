@@ -13,12 +13,15 @@ export const GetAllTeamsService = async (
         value: string;
       }
     | {},
-  userId: String
+  userId: string
 ) => {
   try {
     const filter =
       "key" in query && "value" in query ? { [query.key]: query.value } : {};
-    const teams = await TeamModel.find({ ownerId: userId, ...filter }).lean();
+    const teams = await TeamModel.find({ ownerId: userId, ...filter })
+      .populate({ path: "members.member", select: "name email" })
+      .select("teamName teamMembers members _id  teamImage createdAt")
+      .lean();
     return teams;
   } catch (error) {
     logger.error(`Failed to find teams: ` + error);

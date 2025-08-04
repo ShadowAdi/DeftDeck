@@ -1,7 +1,11 @@
 export type TeamRole = "ADMIN" | "VIEWER" | "EDITOR";
 
 export interface TeamMember {
-  member: string;
+  member: {
+    _id:string;
+    name:string;
+    email:string
+  };
   role: TeamRole;
 }
 
