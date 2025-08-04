@@ -70,11 +70,10 @@ export const CreateTeam = CustomTryCatch(
       throw new AppError(`User with the email:${email} don't exists`, 401);
     }
     const teamData = request.body;
-    const createTeamData = await CreateTeamService(teamData, sub);
+    await CreateTeamService(teamData, sub)
     return response.status(201).json({
       success: true,
       messaged: "Team is Created",
-      createTeamData,
     });
   }
 );
